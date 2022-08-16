@@ -8,9 +8,11 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var datePicked: Date?
 
     @IBOutlet weak var customTableView: UITableView!
-    var datePicked: Date?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,7 +49,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    
+}
+
+
+extension ViewController {
     public func alertTimePickerWithTextField(title: String? = nil, message: String? = nil, placeholder: String? = nil, tag: Int, completion: @escaping ((String) -> Void) = { _ in }) {
         
         let datePicker = UIDatePicker()
@@ -101,6 +106,4 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
             self.present(alert, animated: true)
         }
-    
-    
 }
