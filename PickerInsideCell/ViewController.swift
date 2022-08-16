@@ -10,7 +10,7 @@ import UIKit
 class ViewController: UIViewController {
     
     var datePicked: Date?
-
+    
     @IBOutlet weak var customTableView: UITableView!
     
     override func viewDidLoad() {
@@ -21,14 +21,14 @@ class ViewController: UIViewController {
         self.customTableView.delegate = self
         self.customTableView.dataSource = self
     }
-
-
+    
+    
 }
 
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 20
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -40,7 +40,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc func handleRegister(sender: UIButton){
         alertTimePickerWithTextField( tag: sender.tag)
-       
+        
     }
     
     
@@ -56,54 +56,54 @@ extension ViewController {
     public func alertTimePickerWithTextField(title: String? = nil, message: String? = nil, placeholder: String? = nil, tag: Int, completion: @escaping ((String) -> Void) = { _ in }) {
         
         let datePicker = UIDatePicker()
-
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-
-            let time = Date()
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let time = Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "engb")
+        formatter.dateFormat = "h:mm a"
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+        formatter.string(from: time)
+        //            .textColor = .link
+        
+        datePicker.datePickerMode = .time
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        } else {
+            // Fallback on earlier versions
+        }
+        alert.view.addSubview(datePicker)
+        
+        
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) {  _ in completion("") })
+        alert.addAction(UIAlertAction(title: "Ok", style: .default) { [self] action in
+            
+            
+            
             let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "engb")
+            formatter.locale = Locale(identifier: "en_gb")
             formatter.dateFormat = "h:mm a"
             formatter.amSymbol = "AM"
             formatter.pmSymbol = "PM"
-            formatter.string(from: time)
-            //            .textColor = .link
-
-            datePicker.datePickerMode = .time
-            if #available(iOS 13.4, *) {
-                datePicker.preferredDatePickerStyle = .wheels
-            } else {
-                // Fallback on earlier versions
-            }
-            alert.view.addSubview(datePicker)
-
-
-
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) {  _ in completion("") })
-            alert.addAction(UIAlertAction(title: "Ok", style: .default) { [self] action in
-
-                
-
-                let formatter = DateFormatter()
-                formatter.locale = Locale(identifier: "en_gb")
-                formatter.dateFormat = "h:mm a"
-                formatter.amSymbol = "AM"
-                formatter.pmSymbol = "PM"
-
-                let dateInString = formatter.string(from: datePicker.date)
-
-                
-                let indexPath = IndexPath(row: tag, section: 0)
-                let cell = customTableView.cellForRow(at: indexPath) as! CustomTableViewCell
-                
-                cell.dateLabel.text = dateInString
-               
-
-            })
-
-            let height:NSLayoutConstraint = NSLayoutConstraint(item: alert.view!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 350)
-
-            alert.view.addConstraint(height)
-
-            self.present(alert, animated: true)
-        }
+            
+            let dateInString = formatter.string(from: datePicker.date)
+            
+            
+            let indexPath = IndexPath(row: tag, section: 0)
+            let cell = customTableView.cellForRow(at: indexPath) as! CustomTableViewCell
+            
+            cell.dateLabel.text = "Selected Time: \(dateInString)"
+            
+            
+        })
+        
+        let height:NSLayoutConstraint = NSLayoutConstraint(item: alert.view!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 350)
+        
+        alert.view.addConstraint(height)
+        
+        self.present(alert, animated: true)
+    }
 }
